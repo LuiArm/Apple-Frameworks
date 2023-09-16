@@ -13,17 +13,18 @@ struct FrameworkGridView: View {
                                GridItem(.flexible())]
     
     var body: some View {
-        LazyVGrid(columns: columns) {
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
-            FrameworkTitleView(image: "carplay", title: "Apple Carplay")
+        NavigationStack{
+            ScrollView{
+                LazyVGrid(columns: columns) {
+                    ForEach(MockData.frameworks){ framework in
+                        FrameworkTitleView(framework: framework)
+                    }
+                }
+                
+            }
+            .navigationTitle("Apple Frameworks")
+            .font(.largeTitle)
         }
-        .padding()
-       
         
     }
 }
@@ -36,19 +37,19 @@ struct FrameworkGridView_Previews: PreviewProvider {
 
 
 struct FrameworkTitleView: View {
-    var image: String
-    var title: String
+    let framework: Framework
     
     var body: some View {
         VStack{
-            Image(image)
+            Image(framework.imageName)
                 .resizable()
                 .frame(width: 70,height: 70)
-            Text(title)
+            Text(framework.name)
                 .font(.title2)
                 .fontWeight(.semibold)
                 .scaledToFit()
                 .minimumScaleFactor(0.6)
         }
+        .padding()
     }
 }
