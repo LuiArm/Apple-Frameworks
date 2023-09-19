@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct FrameworkGridView: View {
+    
+    // Iniating a new instance of the view model 
     @StateObject var viewModel = FrameworkGridViewModel()
     
     let columns: [GridItem] = [GridItem(.flexible()),
@@ -20,12 +22,18 @@ struct FrameworkGridView: View {
                 LazyVGrid(columns: columns) {
                     ForEach(MockData.frameworks){ framework in
                         FrameworkTitleView(framework: framework)
+                            .onTapGesture { // when selected framework is tapped, the selectedFramework is changed to the framework being tapped
+                                viewModel.selectedFramework = framework
+                            }
                     }
                 }
                 
             }
             .navigationTitle("Apple Frameworks")
             .font(.largeTitle)
+            .sheet(isPresented: $viewModel.isShowingDetailView){ // the sheet is waiting for isShowingDetailView in view model to be toggled in order to show
+                DetailView(framework: viewModel.selectedFramework ?? MockData.sampleFramework, isShowingDetailView: $viewModel.isShowingDetailView) // if it is toggled to true the detail view will be updated to the selectedFramework from above, else will show sampleFramework
+            }
         }
         
     }

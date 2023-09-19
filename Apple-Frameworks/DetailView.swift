@@ -9,6 +9,8 @@ import SwiftUI
 
 struct DetailView: View {
     var framework: Framework
+    @Binding var isShowingDetailView: Bool
+    @State private var isShowingSafariView = false
     
     var body: some View {
         VStack{
@@ -16,7 +18,7 @@ struct DetailView: View {
                 Spacer()
                 
                 Button {
-                    
+                    isShowingDetailView = false
                 }label: {
                     Image(systemName: "xmark")
                         .foregroundColor(Color(.label))
@@ -30,11 +32,14 @@ struct DetailView: View {
                 .padding()
             
             Button{
-               
+               isShowingSafariView = true
             }label: {
                AFButton(title: "Learn More")
             }
             .padding(.top, 70)
+            .fullScreenCover(isPresented: $isShowingSafariView){
+                SafariView(url: URL(string: framework.urlString) ?? URL(string: "www.apple.com")!)
+            }
         }
         
         
@@ -43,6 +48,6 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(framework: MockData.sampleFramework)
+        DetailView(framework: MockData.sampleFramework, isShowingDetailView: .constant(false))
     }
 }
